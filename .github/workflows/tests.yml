@@ -1,0 +1,15 @@
+name: Pruebas
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install playwright && playwright install --with-deps chromium
+      - run: python3 tests/run_all.py fuzz play city cls t12 t26 t31 t34 t36 t37 t38 t39 t40 t41 t42 t43 qt qt2 ex txt rt sweep
