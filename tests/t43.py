@@ -22,7 +22,8 @@ async def main():
     errs=[];pg.on("pageerror",lambda e:errs.append(str(e)))
     await pg.goto(INDEX);await pg.wait_for_timeout(400)
     await pg.evaluate(MOCK)
-    # sin cid: abre panel
+    # sin cid: abre panel (vacía el ID de index.html para simular una copia sin configurar)
+    await pg.evaluate("document.querySelector('meta[name=\"brumaltea-google-client-id\"]').content=''")
     await pg.click("#c43-in");print("panel visible",await pg.evaluate("!document.getElementById('cfg43').hidden"))
     await pg.fill("#cfg43-id","malo");await pg.click("#cfg43-ok");print("rechaza",await pg.inner_text("#c43-st"))
     await pg.fill("#cfg43-id","123-abc.apps.googleusercontent.com");await pg.click("#cfg43-ok");await pg.wait_for_timeout(300)
