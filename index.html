@@ -7119,14 +7119,14 @@ chCv.addEventListener("pointerdown",e=>{const C=CHS;if(!C||C.over||C.turn!=="w")
   if(C.sel!=null){const m=C.opts.find(m=>m[1]===i);if(m){chMove(m,"w");return;}}
   if(C.b[i]&&C.b[i][0]==="w"){C.sel=i;C.opts=chLegal(C.b,"w").filter(m=>m[0]===i);}else{C.sel=null;C.opts=[];}chRender();});
 /* ---------- el club ---------- */
-{const [x,y]=walkableNear(1012,98);const n=addNPC({id:"fermin",name:"Maese Fermín Alfil, del club de ajedrez",x,y,look:Object.assign({},CC_DEF,{skin:"#d6a47c",hair:"#d6d6d6",style:"bald",robe:"#2a2026",trim:"#e9e1c8",tie:"#e9e1c8",beardStyle:"larga",beard:"#d6d6d6",glassesStyle:"redondas"})});NPC.fermin=n;}
+{const [x,y]=walkableNear(1012,98);const n=addNPC({id:"alfil",name:"Maese Fermín Alfil, del club de ajedrez",x,y,look:Object.assign({},CC_DEF,{skin:"#d6a47c",hair:"#d6d6d6",style:"bald",robe:"#2a2026",trim:"#e9e1c8",tie:"#e9e1c8",beardStyle:"larga",beard:"#d6d6d6",glassesStyle:"redondas"})});NPC.alfil=n;}
 const ens27=()=>{const X=ensureX();if(!X.chess)X.chess={titles:0,cur:{},wk:-1,w:0,l:0,d:0,xp:{d:-1,n:0}};return X.chess;};
 const chessOpen=()=>wday(S.day)===2&&stHour()>=18&&stHour()<21;
 const CHESS_RULES=["El torneo del club es cada <b>miércoles de 18:00 a 21:00</b>. Inscripción con Maese Fermín.","Tres rondas eliminatorias contra jugadores del club, cada una más fuerte: Principiante, Aficionado y la campeona del club, Rosalía Ferrer (Fuerte).","Juegas con blancas. Sin enroque ni captura al paso; los peones coronan en dama. A las 150 jugadas, tablas.","Si hay <b>tablas</b>, pasa quien tenga más material en el tablero; si están igual, pasa el rival (juega en casa).","Premios: campeón, <b>20 puntos</b> para su casa; finalista, 5. Las <b>15 lunas</b> del campeón solo los tres primeros títulos de cada curso. Un torneo por semana.","Las partidas amistosas no dan puntos: solo práctica (y un poco de experiencia las tres primeras victorias del día)."];
 function showChessRules(){showCuadro("Reglamento del Club de Ajedrez",`Próximo torneo: ${chessOpen()?"¡ahora mismo!":"el miércoles, de 18:00 a 21:00"}`,`<ol>${CHESS_RULES.map(r=>`<li>${r}</li>`).join("")}</ol>`,"Entendido",null);}
 OBJ_ACT.tablerogrande=()=>showChessRules();
 OBJ_ACT.tablero=()=>{if(!S.house){say([["","Un tablero de ajedrez con las piezas a medio partido. Nadie se atreve a moverlas."]]);return;}say([["","Una partida a medias. Las piezas te miran, expectantes."],["","¿Echas una partida rápida contra el tablero?",[["Sí, nivel Principiante",()=>chessFriendly(1)],["No",null]]]]);};
-TALK.fermin=()=>{const n=NPC.fermin,C=ens27();const ch=[];
+TALK.alfil=()=>{const n=NPC.alfil,C=ens27();const ch=[];
   if(S.house&&chessOpen()&&C.wk!==weekOf(S.day))ch.push(["Inscribirme en el torneo de hoy",()=>chessTourney()]);
   if(S.house)ch.push(["Partida amistosa",()=>say([[n.name,"¿Contra quién? Elige el nivel.",[["Principiante",()=>chessFriendly(1)],["Aficionado",()=>chessFriendly(2)],["Fuerte (Rosalía)",()=>chessFriendly(3)],["Mejor otro día",null]]]])]);
   ch.push(["Leer el reglamento",()=>showChessRules()]);
@@ -7135,12 +7135,12 @@ function chessFriendly(lvl){const C=ens27();const st=students[(Math.random()*stu
 function chessTourney(){const C=ens27();C.wk=weekOf(S.day);const pool=students.slice().sort(()=>Math.random()-.5);const opps=[{name:pool[0].name},{name:pool[1].name},{name:"Rosalía Ferrer"}];const names=["Primera ronda","Semifinal","Final"];
   const round=i=>{showCuadro(`Torneo de ajedrez · ${names[i]}`,`Rival: <b>${esc(opps[i].name)}</b> · nivel ${CH_LVL[i+1].name}`,`<p style="margin:0">${i===2?"Rosalía Ferrer lleva tres años sin perder un torneo del club. Juega despacio y no regala nada.":"Respira. Mira todo el tablero antes de mover."}</p>`,"Jugar",()=>{
     chOpen(opps[i],i+1,`Torneo · ${names[i]}`,(res,mat)=>{const pass=res==="win"||(res==="draw"&&mat>0);if(res==="win")C.w++;else if(res==="lose")C.l++;else C.d++;
-      if(!pass){const fin=i===2;if(fin){classPts23=Date.now()+800;addPoints(5);}say([[NPC.fermin.name,`${res==="draw"?"Tablas, y el desempate por material es para tu rival. ":""}${fin?"Finalista. Cinco puntos para tu casa, y mi respeto.":"Fuera del torneo. Pero has jugado con cabeza. El miércoles que viene, otra."}`]]);saveGame();return;}
+      if(!pass){const fin=i===2;if(fin){classPts23=Date.now()+800;addPoints(5);}say([[NPC.alfil.name,`${res==="draw"?"Tablas, y el desempate por material es para tu rival. ":""}${fin?"Finalista. Cinco puntos para tu casa, y mi respeto.":"Fuera del torneo. Pero has jugado con cabeza. El miércoles que viene, otra."}`]]);saveGame();return;}
       if(i<2){round(i+1);return;}
       C.titles++;const cur=ensureX().curso||1;C.cur[cur]=(C.cur[cur]||0)+1;classPts23=Date.now()+800;addPoints(20);const lunas=C.cur[cur]<=3;if(lunas){S.lunas+=15;updatePurse();}
-      say([[NPC.fermin.name,`¡Has ganado a Rosalía! Campe${gn("ona","ón","one")} del club. Veinte puntos para ${HOUSES[S.house].name}${lunas?" y quince lunas":""}.`],["Rosalía Ferrer","…Buena partida. La próxima vez juego con blancas."]]);saveGame();});});};
+      say([[NPC.alfil.name,`¡Has ganado a Rosalía! Campe${gn("ona","ón","one")} del club. Veinte puntos para ${HOUSES[S.house].name}${lunas?" y quince lunas":""}.`],["Rosalía Ferrer","…Buena partida. La próxima vez juego con blancas."]]);saveGame();});});};
   round(0);}
-const _nm27=npcMarker;npcMarker=function(n){const m=_nm27(n);if(m)return m;if(n.id==="fermin"&&S.house&&chessOpen()&&ens27().wk!==weekOf(S.day))return "!";return null;};
+const _nm27=npcMarker;npcMarker=function(n){const m=_nm27(n);if(m)return m;if(n.id==="alfil"&&S.house&&chessOpen()&&ens27().wk!==weekOf(S.day))return "!";return null;};
 const _nd27=onNewDay;onNewDay=function(){_nd27();if(wday(S.day)===2&&S.house&&qStage("m1")>=7)setTimeout(()=>toast("Hoy es miércoles: <b>torneo de ajedrez</b> en el Club, de 18:00 a 21:00"),7000);};
 </script>
 <!--/s27.js-->
