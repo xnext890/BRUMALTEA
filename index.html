@@ -897,7 +897,7 @@ let VW=320,VH=180,SCALE=3;
 const light=document.createElement("canvas"),lctx=light.getContext("2d");
 function resize(){
   const w=window.innerWidth,h=window.innerHeight;
-  SCALE=Math.max(2,Math.round(Math.min(w/440,h/250)));
+  SCALE=Math.max(2,Math.round(Math.min(w/640,h/360)));
   VW=Math.ceil(w/SCALE);VH=Math.ceil(h/SCALE);
   cv.width=VW;cv.height=VH;cv.style.width=VW*SCALE+"px";cv.style.height=VH*SCALE+"px";
   light.width=VW;light.height=VH;ctx.imageSmoothingEnabled=false;
@@ -1368,7 +1368,7 @@ const TALK={
     if(st===3){say([["Directora Albarrán","Bienvenidos, nuevos y viejos. Un año más, Brumaltea abre sus puertas."],
       ["Directora Albarrán","Las normas de siempre: nada de salir al Hondo de noche, nada de molestar a los trasgos y, sobre todo, nadie se acerca al Ala Oeste."],
       ["Directora Albarrán","Lleva cien años sellada. Y sin embargo… algunos alumnos dicen que desde el verano se oye un piano al otro lado."],
-      ["Directora Albarrán","Seguro que son imaginaciones. Ahora id a descansar: la profesora Mirlo da su primera clase esta misma noche, en el Aula de Encantamientos."]],()=>{qAdvance("m1");});return;}
+      ["Directora Albarrán","Seguro que son imaginaciones. Y no os acomodéis demasiado: la profesora Mirlo da su primera clase esta misma noche, en el Aula de Encantamientos."]],()=>{qAdvance("m1");});return;}
     say([["Directora Albarrán",st>=10?"Has abierto un ala que nadie abría desde hace un siglo. Tendremos que hablar de esto, tú y yo.":"Si necesitas algo, mi despacho está en lo alto del Ala Norte. Aunque casi siempre me encontrarás aquí, vigilando que nadie se coma el postre antes de tiempo."]]);
   },
   mirlo(){
@@ -1804,7 +1804,7 @@ if(store.get(SAVE_KEY))$("btn-continue").hidden=false;
       <div class="cc-tabs" id="cc-tabs" role="tablist"></div>
       <div id="cc-opts"></div>
     </div>
-    <footer><span class="count" id="cc-count"></span><button class="btn ghost" id="cc-back">Volver</button><button class="btn" id="cc-go">Subir al tren</button></footer>
+    <footer><span class="count" id="cc-count"></span><button class="btn ghost" id="cc-back">Volver</button><button class="btn" id="cc-go">Empezar en Valdeniebla</button></footer>
   </div>
 </div>
 <script>
@@ -1933,9 +1933,9 @@ function openCreator(edit,tab){
   ccLook=Object.assign({},CC_DEF,edit&&S.look?S.look:randomLook(rng((Math.random()*1e9)|0)));
   if(!edit){ccLook.name="";ccLook.pron="a";ccLook.pet="none";ccLook.wand=null;ccLook.gem=null;}
   delete ccLook.trim;delete ccLook.tie;delete ccLook._k;
-  $("cc-go").textContent=edit?"Guardar cambios":"Subir al tren";$("cc-back").textContent=edit?"Cancelar":"Volver";
+  $("cc-go").textContent=edit?"Guardar cambios":"Empezar en Valdeniebla";$("cc-back").textContent=edit?"Cancelar":"Volver";
   $("cc-sub").textContent=edit?"Cambia lo que quieras. La casa no se puede cambiar: eso lo decidió el lago.":"Así te verá Brumaltea. La casa la decidirá el lago.";
-  $("cc-count").textContent=`${new Intl.NumberFormat("es-ES").format(ccCount())} combinaciones posibles`;
+
   $("title").hidden=true;$("creator").hidden=false;ccTab=tab||0;ccRender();ccAnim();
   if(edit){ccPrevPause=pauseFlag;pauseFlag=true;}
   if(!isTouch)setTimeout(()=>{const i=$("cc-name");if(i)i.focus();},50);
@@ -3052,7 +3052,7 @@ const _md5=moreDrawables;moreDrawables=function(list,cx,cy,x0,y0,x1,y1){_md5(lis
   if(!S.started)return;
   for(const f of friends){if(!friendsFollow()&&qStage("m0")!==0)continue;const x=f.px-cx,y=f.py-cy;if(x<-20||y<-10||x>VW+20||y>VH+40)continue;
     list.push({y:f.py,fn:()=>drawChar(ctx,x,y,friendLook(f.id),f.dir,f.moving?Math.floor(f.anim):0)});}};
-const _mi5=moreInteractables;moreInteractables=function(L){_mi5(L);if(!S.started)return;for(const f of friends){if(!friendsFollow()&&qStage("m0")!==0)continue;L.push({x:f.px,y:f.py-6,r:18,ph:36,pri:qStage("m0")===0?0:40,fn:()=>talkFriend(f)});}
+const _mi5=moreInteractables;moreInteractables=function(L){_mi5(L);if(!S.started)return;for(const f of friends){if(!friendsFollow()&&qStage("m0")!==0)continue;L.push({x:f.px,y:f.py-6,r:22,ph:36,pri:qStage("m0")===0?0:40,fn:()=>talkFriend(f)});}
   for(const o of objects)if(o.wish&&dist(o.x*TS+16,o.y*TS+16,S.px,S.py)<40)L.push({x:o.x*TS+16,y:o.y*TS+10,r:26,ph:30,fn:wishFountain});};
 function wishFountain(){if((S.lunas||0)<1){say([["","La Fuente de los Deseos. Hace falta una luna para pedir algo."]]);return;}
   say([["","La Fuente de los Deseos. ¿Echas una luna y pides un deseo?",[["Echar una luna",()=>{S.lunas--;const r=Math.random();if(r<.25){const miss=Object.keys(ESTAMPAS).map(Number).filter(i=>!S.estampas.includes(i));if(miss.length){giveEstampa(miss[(Math.random()*miss.length)|0]);return;}}if(r<.6){S.bag.bollo=(S.bag.bollo||0)+1;toast("Del agua sale flotando… ¿un bollo de nube?");}else toast("La moneda brilla un instante y desaparece. Quién sabe.");saveGame();}],["Mejor no",null]]]]);}
@@ -7152,8 +7152,9 @@ const _nd27=onNewDay;onNewDay=function(){_nd27();if(wday(S.day)===2&&S.house&&qS
    ========================================================= */
 const OVERLAYS28=["dialog","menu","cls","casas","cuadro","ajedrez","shop","rite","trainv","ending","creator","fishui"];
 function overlayOpen(){for(const id of OVERLAYS28){const e=$(id);if(e&&!e.hidden&&getComputedStyle(e).display!=="none")return true;}const f=$("fade");return !!(f&&f.classList.contains("on"));}
-function safeSpotNear(px,py){const tx=Math.floor(px/TS),ty=Math.floor(py/TS);for(let r=0;r<14;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const x=tx+dx,y=ty+dy;if(x<0||y<0||x>=W||y>=H||!reach[y*W+x])continue;const X=x*TS+8,Y=y*TS+12;if(boxFree(X,Y))return [X,Y];}return null;}
-function rescue(msg){const s=safeSpotNear(S.px,S.py)||[979*TS+8,80*TS+12];S.px=s[0];S.py=s[1];camInit=false;resetParty();if(msg)toast(msg);}
+function safeSpotNear(px,py,map){map=map||reach;const tx=Math.floor(px/TS),ty=Math.floor(py/TS);for(let r=0;r<14;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const x=tx+dx,y=ty+dy;if(x<0||y<0||x>=W||y>=H||!map[y*W+x])continue;const X=x*TS+8,Y=y*TS+12;if(boxFree(X,Y))return [X,Y];}return null;}
+/* sin hueco en «reach» (p. ej. la tienda de varitas, a la que se entra por puerta) se prueba con cualquier casilla transitable; en tierra firme el último recurso es la fuente del puerto, no el castillo */
+function rescue(msg){const s=safeSpotNear(S.px,S.py)||safeSpotNear(S.px,S.py,walk)||(S.flags.side==="mainland"?[114*TS+8,67*TS+12]:[979*TS+8,80*TS+12]);S.px=s[0];S.py=s[1];camInit=false;resetParty();if(msg)toast(msg);}
 let pauseStuck=0,boxStuck=0,still=0,lastPos=[0,0];
 setInterval(()=>{if(!S.started)return;
   /* 1) pausa sin ninguna ventana abierta: se libera sola */
@@ -8344,6 +8345,8 @@ const _ta39=TALK.albarran;TALK.albarran=()=>{const X=ensureX(),c=X.curso||1;
     const cs=cursoState();if(cs.ready&&c<7){say([["Directora Albarrán",`Has hecho todo lo que se le pide a alguien de ${CURSO_NAMES[c]}. ¿Damos el curso por terminado? Pasarás el verano fuera y volverás a ${CURSO_NAMES[c+1]}.`,[["Sí, terminar el curso",endCurso],["Todavía no, quiero hacer más cosas",null]]]]);return;}
     if(!cs.last&&st===99&&!cs.lvl){say([["Directora Albarrán",`Para pasar a ${CURSO_NAMES[c+1]} te falta llegar a nivel ${cs.need} (tienes ${lvlN()}). Los encargos del Gremio y los retos de duelo dan mucha experiencia.`]]);return;}}
   _ta39();};
+/* tras el espejo de plata dijo «luego hablamos»: en primero lo reconoce una vez (la conversación de verdad llega en sexto) */
+{const _tap=TALK.albarran;TALK.albarran=()=>{if(S.flags.plata&&!S.flags.albPromesa&&(ensureX().curso||1)===1&&qStage("m1")>=4&&!qBusyFor("albarran")){S.flags.albPromesa=true;say([["Directora Albarrán","¿Lo del espejo? Sí. Te dije que hablaríamos, y hablaremos."],["Directora Albarrán","Pero no esta noche. Antes tienes que aprender a encender una vela sin quemar el aula. Lo demás… puede esperar un poco."]]);saveGame();return;}_tap();};}
 const ALB_HOOK39={};
 const _rt39=refreshTracker;refreshTracker=function(){_rt39();const tr=$("tracker");const X=ensureX();if((X.curso||1)<4)return;for(const d of [...tr.querySelectorAll(".quest")]){if(!/Curso (cuarto|quinto|sexto|séptimo)/.test(d.textContent))continue;const c=cursoState();
   d.innerHTML=c.ready?`<b>Fin del curso ${CURSO_NAMES[X.curso]}</b>Ya puedes pasar de curso. Habla con la directora Albarrán.`:c.last?`<b>Curso ${CURSO_NAMES[X.curso]}</b>Brumaltea no se acaba: encargos, duelos, amigos y secretos.`:`<b>Curso ${CURSO_NAMES[X.curso]}</b>Para pasar a ${CURSO_NAMES[X.curso+1]}: ${c.qd?"":"termina la historia, "}nivel ${c.need} (tienes ${lvlN()}).`;}};
@@ -8721,7 +8724,7 @@ const EV42={
 const EVK42=Object.keys(EV42);
 PICK_DRAW.carta42=(g,x,y,t)=>{const b=Math.round(Math.sin(t*3+x)*1);P(g,"rgba(0,0,0,.25)",x-5,y,10,2);P(g,"#e8dcc0",x-5,y-7+b,10,7);P(g,"#c9b98a",x-5,y-7+b,10,1);P(g,"#c9b98a",x-5,y-7+b,5,4);P(g,"#a8343e",x-1,y-4+b,2,2);};
 const _col42=collect;collect=function(p){_col42(p);if(p&&p.kind==="carta42"){const n=pickups.filter(q=>q.kind==="carta42"&&q.id.startsWith("ev42c"+S.day)&&!pickVisible(q)).length;toast(`Carta del búho (${n}/3)`);}};
-const _gu42=gameUpdate;gameUpdate=function(dt){_gu42(dt);const X=X42();if(!S.started||!S.house||qStage("m1")<3||S.flags.side==="mainland")return;const h=stHour(),E=X.ev42;
+const _gu42=gameUpdate;gameUpdate=function(dt){_gu42(dt);const X=X42();if(!S.started||!S.house||qStage("m1")<7||S.flags.side==="mainland")return;const h=stHour(),E=X.ev42;
   if(E.day!==S.day&&h>=7&&h<20&&$("dialog").hidden&&!pauseFlag){E.day=S.day;E.done=false;E.k=null;if((S.day*5+(X.curso||1))%3!==2){const k=EVK42[(S.day*7+(X.curso||1)*3)%EVK42.length];if(EV42[k].start()){E.k=k;toast(`<b>En el castillo:</b> ${EV42[k].d}`);refreshTracker();}}}
   if(!E.k||E.done)return;
   if(E.k==="gargola"&&!foes.some(f=>f.ev42&&!f.dead)&&E.started){evDone42("La gárgola vuelve a su cornisa, avergonzada. +15 puntos",()=>addPoints(15));}if(E.k==="gargola"&&foes.some(f=>f.ev42))E.started=1;
